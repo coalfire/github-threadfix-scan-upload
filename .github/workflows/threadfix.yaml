@@ -26,7 +26,7 @@ jobs:
 #       - name: Debug failure
 #         if: failure()
 #         run: |
-#               echo  ${{ secrets.TFIX_DEMO_GITHUB_TEAM }}
+#
 #          #    cat input_file.json && echo "no valid data to work with!"
          
 #       - name: Upload SARIF file
@@ -79,10 +79,10 @@ jobs:
 #          name: SARIF
       - name: Test instance
         run: |
-            curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_DEMO_GITHUB_TEAM}}" https://ec2-18-218-94-239.us-east-2.compute.amazonaws.com/threadfix/rest/latest/applications/48
+            curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" https://ec2-18-218-94-239.us-east-2.compute.amazonaws.com/threadfix/rest/latest/applications/48
  
       - name: Push to threadfix
         run: |
-               curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_DEMO_GITHUB_TEAM}}" -X POST --form file=./output_file.threadfix https://ec2-18-218-94-239.us-east-2.compute.amazonaws.com/threadfix/rest/latest/applications/48/upload
+               curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" -X POST --form file=./output_file.threadfix https://ec2-18-218-94-239.us-east-2.compute.amazonaws.com/threadfix/rest/latest/applications/48/upload
        
  
