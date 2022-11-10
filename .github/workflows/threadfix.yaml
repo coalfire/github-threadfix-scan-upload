@@ -85,6 +85,6 @@ jobs:
             ls -a
       - name: Push to threadfix
         run: |
-               curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" -X POST --form file=@path/./output_file.threadfix ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}/latest/applications/1/upload
+               curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" -X POST --form file=@path/output_file.threadfix ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}/latest/applications/1/upload
        
  
