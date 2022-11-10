@@ -7,76 +7,73 @@ permissions:
   contents: read
   
 jobs:
-#  create_input_file:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: GET code scanning alerts
-#         uses: actions/checkout@v3
-#       # this should be a script and should pull content based on pagination
-#       # should also guard against no content 
-#       - run: | 
-#               gh api repos/${{ github.repository }}/code-scanning/alerts --paginate | jq --slurp 'flatten' > ./input_file.json
-#         env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ create_input_file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GET code scanning alerts
+        uses: actions/checkout@v3
+      - run: | 
+              gh api repos/${{ github.repository }}/code-scanning/alerts --paginate | jq --slurp 'flatten' > ./input_file.json
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               
-#       - name: Validate file 
-#         run : |
-#               cat input_file.json | grep "number" >/dev/null && echo "got data!" || exit 1; 
+      - name: Validate file 
+        run : |
+              cat input_file.json | grep "number" >/dev/null && echo "got data!" || exit 1; 
           
-#       - name: Debug failure
-#         if: failure()
-#         run: |
-#
-#          #    cat input_file.json && echo "no valid data to work with!"
-         
-#       - name: Upload SARIF file
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: SARIF
-#           path: input_file.json
+      - name: Debug failure
+        if: failure()
+        run: |
+             cat input_file.json && echo "no valid data to work with!"
+ 
+      - name: Upload SARIF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: SARIF
+          path: input_file.json
        
 
-#   create_output_file:
-#     runs-on: ubuntu-latest
-#     needs: create_input_file
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#          python-version: '3.10'
-#       - name: Download json file and echo it
-#         uses: actions/download-artifact@v3
-#         with:
-#          name: SARIF
-#       - shell: bash
-#         run: |
-#           value=`cat input_file.json`
-#           echo $value
-#       - name: Run conversion script
-#         run: python sarif_converter.py input_file.json output_file.threadfix
-#       - name: look around
-#         run: |
-#           value=`cat output_file.threadfix`
-#           echo $value
-#           ls -a
-#       - name: Upload output file
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: SARIF
-#           path: output_file.threadfix
+ create_output_file:
+    runs-on: ubuntu-latest
+    needs: create_input_file
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+         python-version: '3.10'
+      - name: Download json file and echo it
+        uses: actions/download-artifact@v3
+        with:
+         name: SARIF
+      - shell: bash
+        run: |
+          value=`cat input_file.json`
+          echo $value
+      - name: Run conversion script
+        run: python sarif_converter.py input_file.json output_file.threadfix
+      - name: look around
+        run: |
+          value=`cat output_file.threadfix`
+          echo $value
+          ls -a
+      - name: Upload output file
+        uses: actions/upload-artifact@v3
+        with:
+          name: SARIF
+          path: output_file.threadfix
           
-  push_to_threadfix: 
+ push_to_threadfix: 
      runs-on: ubuntu-latest
-#      needs: create_output_file
+     needs: create_output_file
      steps:
       - name: Checkout
         uses: actions/checkout@v3
-#       - name: Download output file and push it to threadfix
-#         uses: actions/download-artifact@v3
-#         with:
-#          name: SARIF
+      - name: Download output file and push it to threadfix
+        uses: actions/download-artifact@v3
+        with:
+          name: SARIF
       - name: Test instance
         run: |
             curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" ${{secrets.TFIX_TEST_URL}}/latest/applications/1
