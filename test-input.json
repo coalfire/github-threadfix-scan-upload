@@ -1,0 +1,202 @@
+[
+    {
+        "number": 4,
+        "created_at": "2022-08-02T20:48:12Z",
+        "updated_at": "2022-08-02T20:48:13Z",
+        "url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/4",
+        "html_url": "https://github.com/dsp-testing/Alex-testing/security/code-scanning/4",
+        "state": "open",
+        "fixed_at": null,
+        "dismissed_by": null,
+        "dismissed_at": null,
+        "dismissed_reason": null,
+        "dismissed_comment": null,
+        "rule": {
+            "id": "rb/unsafe-deserialization",
+            "severity": "warning",
+            "description": "Deserialization of user-controlled data",
+            "name": "rb/unsafe-deserialization",
+            "tags": [
+                "external/cwe/cwe-502",
+                "security"
+            ],
+            "security_severity_level": "critical"
+        },
+        "tool": {
+            "name": "CodeQL",
+            "guid": null,
+            "version": "2.10.0"
+        },
+        "most_recent_instance": {
+            "ref": "refs/heads/main",
+            "analysis_key": ".github/workflows/codeql.yml:analyze",
+            "environment": "{\"language\":\"ruby\"}",
+            "category": ".github/workflows/codeql.yml:analyze/language:ruby",
+            "state": "open",
+            "commit_sha": "db1b0d00d879ba45c3a7d7e024169465048bef9a",
+            "message": {
+                "text": "Unsafe deserialization of user input."
+            },
+            "location": {
+                "path": "test2.rb",
+                "start_line": 6,
+                "end_line": 6,
+                "start_column": 24,
+                "end_column": 33
+            },
+            "classifications": [
+                "test"
+            ]
+        },
+        "instances_url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/4/instances"
+    },
+    {
+        "number": 3,
+        "created_at": "2022-07-29T23:14:00Z",
+        "updated_at": "2022-08-02T20:48:13Z",
+        "url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/3",
+        "html_url": "https://github.com/dsp-testing/Alex-testing/security/code-scanning/3",
+        "state": "open",
+        "fixed_at": null,
+        "dismissed_by": null,
+        "dismissed_at": null,
+        "dismissed_reason": null,
+        "dismissed_comment": null,
+        "rule": {
+            "id": "rb/unsafe-deserialization",
+            "severity": "warning",
+            "description": "Deserialization of user-controlled data",
+            "name": "rb/unsafe-deserialization",
+            "tags": [
+                "external/cwe/cwe-502",
+                "security"
+            ],
+            "security_severity_level": "critical"
+        },
+        "tool": {
+            "name": "CodeQL",
+            "guid": null,
+            "version": "2.10.0"
+        },
+        "most_recent_instance": {
+            "ref": "refs/heads/main",
+            "analysis_key": ".github/workflows/codeql.yml:analyze",
+            "environment": "{\"language\":\"ruby\"}",
+            "category": ".github/workflows/codeql.yml:analyze/language:ruby",
+            "state": "open",
+            "commit_sha": "db1b0d00d879ba45c3a7d7e024169465048bef9a",
+            "message": {
+                "text": "Unsafe deserialization of user input."
+            },
+            "location": {
+                "path": "test.rb",
+                "start_line": 6,
+                "end_line": 6,
+                "start_column": 24,
+                "end_column": 33
+            },
+            "classifications": [
+                "test"
+            ]
+        },
+        "instances_url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/3/instances"
+    },
+    {
+        "number": 2,
+        "created_at": "2022-07-29T23:04:44Z",
+        "updated_at": "2022-08-02T20:48:13Z",
+        "url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/2",
+        "html_url": "https://github.com/dsp-testing/Alex-testing/security/code-scanning/2",
+        "state": "open",
+        "fixed_at": null,
+        "dismissed_by": null,
+        "dismissed_at": null,
+        "dismissed_reason": null,
+        "dismissed_comment": null,
+        "rule": {
+            "id": "rb/unsafe-deserialization",
+            "severity": "warning",
+            "description": "Deserialization of user-controlled data",
+            "name": "rb/unsafe-deserialization",
+            "tags": [
+                "external/cwe/cwe-502",
+                "security"
+            ],
+            "security_severity_level": "critical"
+        },
+        "tool": {
+            "name": "CodeQL",
+            "guid": null,
+            "version": "2.10.0"
+        },
+        "most_recent_instance": {
+            "ref": "refs/heads/main",
+            "analysis_key": ".github/workflows/codeql.yml:analyze",
+            "environment": "{\"language\":\"ruby\"}",
+            "category": ".github/workflows/codeql.yml:analyze/language:ruby",
+            "state": "open",
+            "commit_sha": "db1b0d00d879ba45c3a7d7e024169465048bef9a",
+            "message": {
+                "text": "Unsafe deserialization of user input."
+            },
+            "location": {
+                "path": "anothercode.rb",
+                "start_line": 6,
+                "end_line": 6,
+                "start_column": 24,
+                "end_column": 33
+            },
+            "classifications": []
+        },
+        "instances_url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/2/instances"
+    },
+    {
+        "number": 1,
+        "created_at": "2022-07-29T22:48:47Z",
+        "updated_at": "2022-08-02T20:48:13Z",
+        "url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/1",
+        "html_url": "https://github.com/dsp-testing/Alex-testing/security/code-scanning/1",
+        "state": "open",
+        "fixed_at": null,
+        "dismissed_by": null,
+        "dismissed_at": null,
+        "dismissed_reason": null,
+        "dismissed_comment": null,
+        "rule": {
+            "id": "rb/unsafe-deserialization",
+            "severity": "warning",
+            "description": "Deserialization of user-controlled data",
+            "name": "rb/unsafe-deserialization",
+            "tags": [
+                "external/cwe/cwe-502",
+                "security"
+            ],
+            "security_severity_level": "critical"
+        },
+        "tool": {
+            "name": "CodeQL",
+            "guid": null,
+            "version": "2.10.0"
+        },
+        "most_recent_instance": {
+            "ref": "refs/heads/main",
+            "analysis_key": ".github/workflows/codeql.yml:analyze",
+            "environment": "{\"language\":\"ruby\"}",
+            "category": ".github/workflows/codeql.yml:analyze/language:ruby",
+            "state": "open",
+            "commit_sha": "db1b0d00d879ba45c3a7d7e024169465048bef9a",
+            "message": {
+                "text": "Unsafe deserialization of user input."
+            },
+            "location": {
+                "path": "code.rb",
+                "start_line": 6,
+                "end_line": 6,
+                "start_column": 24,
+                "end_column": 33
+            },
+            "classifications": []
+        },
+        "instances_url": "https://api.github.com/repos/dsp-testing/Alex-testing/code-scanning/alerts/1/instances"
+    }
+]
