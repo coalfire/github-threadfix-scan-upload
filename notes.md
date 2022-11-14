@@ -5,12 +5,12 @@
 - The URL should be broken down the following way:
 
 ```curl
-curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY {secrets.apiKey}" -X POST --form file=@path/to/file/www_example_url_com_webinspect_scan.xml ${{secrets.instance_URL}}/threadfix/rest/latest/applications/${{secrets.instance_number}}/upload
+curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY {secrets.tfix_API_key}" -X POST --form file=@path/to/file/www_example_url_com_webinspect_scan.xml ${{secrets.instance_URL}}/threadfix/rest/latest/applications/${{secrets.instance_number}}/upload
 ```
 And (If we decide to use it)
 
 ```curl
-curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY_GITHUB_TEAM}}" ${{secrets.instance_URL}}/rest/latest/applications/${{secrets.instance_number}}
+curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.tfix_API_key}}" ${{secrets.tfix_app_URL}}/rest/latest/applications/${{secrets.tfix_API_ID}}
 ```
 
 - The output file includes `description` and `summary`, which include the same value. Need to look into this.
