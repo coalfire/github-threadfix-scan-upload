@@ -43,21 +43,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
          python-version: '3.10'
-      - name: Download json file and echo it
+      - name: Download input file
         uses: actions/download-artifact@v3
         with:
          name: SARIF
-      - shell: bash
-        run: |
-          value=`cat input_file.json`
-          echo $value
-      - name: Run conversion script
+      - name: Convert to Threadfix file
         run: python sarif_converter.py input_file.json output_file.threadfix
-      - name: look around
-        run: |
-          value=`cat output_file.threadfix`
-          echo $value
-          ls -a
       - name: Upload output file
         uses: actions/upload-artifact@v3
         with:
@@ -70,11 +61,11 @@ jobs:
      steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download output file and push it to threadfix
+      - name: Download output file and push it to Threadfix
         uses: actions/download-artifact@v3
         with:
           name: SARIF
-      - name: Test instance
+      - name: Test instance connection
         run: |
             curl --insecure -H 'Accept: application/json' -H "Authorization: APIKEY ${{secrets.TFIX_API_KEY}}" ${{secrets.TFIX_INSTANCE_URL}}/threadfix/rest/latest/applications/${{secrets.TFIX_APP_ID}}
       - name: Check file
