@@ -6,7 +6,7 @@ import random
 import string
 import sys
 
-## This converts SARIF to threadfix
+## Converts SARIF to Threadfix
 def make_ref_rule_dict(item):
     ret_val = { }
     current_rule = { }
@@ -38,8 +38,6 @@ def assemble_findings_for_run(finding_list, item):
     ref_rule_dict = make_ref_rule_dict(item)
     finding_dict = { }
 
-    #     # Create a random findingId because CodeQL doesn't track unique IDs across tool executions
-    #     # TODO - May be able to use some of the fingerprint stuff to fill this in better
     letters = string.ascii_letters
     finding_id = ''.join(random.choice(letters) for i in range(256))
     finding_dict['nativeId'] = finding_id
@@ -51,7 +49,6 @@ def assemble_findings_for_run(finding_list, item):
 
 
     # #     # If the rule had a CWE, add that mapping, otherwise map as a CodeQL mapping
-    # #     # TODO - Expand handling for tools other than CodeQL
     if ref_rule_dict[first_key]['isCwe'] == True:
         mapping_dict = { }
         mapping_dict['mappingType'] = 'CWE'
@@ -74,7 +71,6 @@ def assemble_findings_for_run(finding_list, item):
     finding_dict['description'] = ref_rule_dict[first_key]['shortDescription']
 
     #     # Make the dataflow
-    #     # TODO - Track the actual dataflow - not just the first entry
     dataflow_dict = { }
     start_file = item['instances_url']
     dataflow_dict['file'] = start_file
@@ -114,15 +110,12 @@ with open(infile, "r") as read_file:
 
 output = { }
 
-# Get the basics out of the way
+# Metadata
 output['collectionType'] = 'SAST'
-# TOFIX - Determine how we want to do this - do we want to detect the value from the SARIF tools or stuff it in as a command-line argument?
 output['source'] = 'CodeQL'
 
 
-# Handle timestamp stuff
-# SARIF doesn't appear to have timestamps, so we will just use the time of conversion. Not perfect - but what can you do?
-
+# Handle timestamp 
 created_date_string = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%dT%H:%M:%SZ')
 output['created'] = str(created_date_string)
 output['exported'] = str(created_date_string)
@@ -131,12 +124,6 @@ output['updated'] = str(created_date_string)
 
 
 
-
-# For every "run" and every "tool" element in the file, create new findings to add to the list. This assumes - as you really can't with
-# SARIF - that all the "tool" driver values will be the same and that the runs are equal.
-
-
-## -----Beginning---
 finding_list = [ ]
 
 for item in sarif_data:
