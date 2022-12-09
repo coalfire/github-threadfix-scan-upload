@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Run Threadfix Connector
-        uses: AlexDeMichieli/insecure-test-app@master
+        uses: # Name of the action
         with: 
           TFIX_API_KEY: ${{secrets.TFIX_API_KEY}}
           TFIX_INSTANCE_URL: ${{secrets.TFIX_INSTANCE_URL}}
