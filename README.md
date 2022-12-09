@@ -10,6 +10,11 @@ Before you proceed further, make sure to have 3 key elements at hand as you'll n
 - Threadfix Instance URL
 - Threadfix APP ID 
 
+If you do not know the ID of your application, you can make a GET request to the [following endpoint](https://denimgroup.atlassian.net/wiki/spaces/TDOC/pages/2879324234/Get+Application+by+Name+or+Unique+ID+-+API):
+
+`/rest/{version}/applications/{teamName}/lookup?name={appName}`
+
+
 To use this workflow, simply include it in your action. Here's an example:
 
 ```yaml
