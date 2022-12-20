@@ -20,9 +20,9 @@ If you do not know the ID of your application, you can make a GET request to the
 
 Additionally, you'll need to configure your ThreadFix deployment to recognize this new scanner source. 
 
-1. Log into ThreadFix and click Global>Administration>System Settings>Scanner Settings
+1. Log into ThreadFix and click Global>Administration > System Settings > Scanner Settings
 1. Click the grey "Create New Scanner" button at the top of the page
-1. Add details as needed, making sure the scanner name matched "CodeQL" (note capitalization)
+1. Add details as needed, making sure the scanner name matched "GitHub Advanced Security" (note capitalization)
 
 ## Use
 
