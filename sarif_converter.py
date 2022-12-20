@@ -48,7 +48,7 @@ def assemble_findings_for_run(finding_list, item):
     finding_dict['nativeSeverity'] = ref_rule_dict[first_key]['nativeSeverity']
 
 
-    # #     # If the rule had a CWE, add that mapping, otherwise map as a CodeQL mapping
+    # #     # If the rule had a CWE, add that mapping
     if ref_rule_dict[first_key]['isCwe'] == True:
         mapping_dict = { }
         mapping_dict['mappingType'] = 'CWE'
@@ -112,7 +112,7 @@ output = { }
 
 # Metadata
 output['collectionType'] = 'SAST'
-output['source'] = 'CodeQL'
+output['source'] = 'GitHub Advanced Security'
 
 
 # Handle timestamp 
