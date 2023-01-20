@@ -17,7 +17,18 @@ runs:
   using: "composite"
   steps:
     - name: Get code scanning alerts
-      run: gh api repos/${{github.repository}}/code-scanning/alerts --paginate | jq --slurp 'flatten' > ./input_file.json
+      run: |
+             latest_import_time=$(curl --location --request GET '${{inputs.TFIX_INSTANCE_URL}}/threadfix/rest/latest/applications/1/scans' \
+             --header 'Accept: application/json' \
+             --header 'Authorization: APIKEY ${{inputs.TFIX_API_KEY}}' | jq '.object[0].importTime')
+             timestamp_conversion=$(TZ=GMT date -d @$(($latest_import_time/1000)) +"%a, %d %b %Y %T %Z")
+             http_status=$( gh api repos/${{ github.repository }}/code-scanning/alerts -H "If-Modified-Since: $timestamp_conversion" -i | grep "HTTP" | awk '{print $2}')
+             if [ "$http_status" == "304" ]; then
+               echo "No new alerts found, terminating"
+               exit 0;
+             else
+               gh api repos/${{ github.repository }}/code-scanning/alerts --paginate | jq --slurp 'flatten' > ./input_file.json
+             fi
       shell: bash
       env:
          GITHUB_TOKEN: ${{github.token}}
@@ -25,7 +36,7 @@ runs:
       run : cat input_file.json | grep "number" >/dev/null && echo "got data!" || exit 1; 
       shell: bash
     - name: Convert to Threadfix format
-      run: python ${{github.action_path}}/sarif_converter.py input_file.json output_file.threadfix
+      run: python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix
       shell: bash
     - name: Push results to Threadfix
       run: |
