@@ -16,9 +16,15 @@ def make_ref_rule_dict(item):
     current_rule['id'] = item['rule']['id']
     current_rule['shortDescription'] = item['rule']['description']
     current_rule['fullDescription'] = item['rule']['description'] ## To revisit
-    current_rule['nativeSeverity'] = item['rule']['security_severity_level'].capitalize()
-    current_rule['severity'] = item['rule']['security_severity_level'].capitalize()
-    
+
+    if 'security_severity_level' in item['rule']:
+        current_rule['nativeSeverity'] = item['rule']['security_severity_level'].capitalize()
+        current_rule['severity'] = item['rule']['security_severity_level'].capitalize()
+    else:
+        current_rule['nativeSeverity'] = item['rule']['severity'].capitalize()
+        current_rule['severity'] = item['rule']['severity'].capitalize()
+
+
 
     vuln_type = item['rule']['id']
     current_rule['isCwe'] = False
