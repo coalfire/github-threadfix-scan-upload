@@ -17,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: Get code scanning alerts
-      run: gh api repos/${{github.repository}}/code-scanning/alerts -F state=open -F ref=${{github.ref}} --paginate | jq --slurp 'flatten' > ./input_file.json
+      run: gh api -X GET repos/${{github.repository}}/code-scanning/alerts -F state=open -F ref=${{github.ref}} --paginate | jq --slurp 'flatten' > ./input_file.json
       shell: bash
       env:
          GITHUB_TOKEN: ${{github.token}}
