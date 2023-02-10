@@ -2,9 +2,7 @@
 
 import datetime
 import json
-import string
 import sys
-import random
 
 
 # Converts SARIF to Threadfix
