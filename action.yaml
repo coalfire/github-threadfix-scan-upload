@@ -22,7 +22,7 @@ runs:
       env:
          GITHUB_TOKEN: ${{github.token}}
     - name: Validate file 
-      run : cat input_file.json | grep "number" >/dev/null && echo "got data!" || exit 1; 
+      run : if test -f "input_file.json"; then echo "got data"; else exit 1; fi
       shell: bash
     - name: Convert to Threadfix format
       run: python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix
