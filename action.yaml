@@ -25,7 +25,7 @@ runs:
       run : if test -f "input_file.json"; then echo "got data"; else exit 1; fi
       shell: bash
     - name: Convert to Threadfix format
-      run: python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix ${{github.repository}}
+      run: python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix "${{github.repository}}_${{github.ref}}"
       shell: bash
     - name: Push results to Threadfix
       run: |
