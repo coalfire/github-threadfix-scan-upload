@@ -25,7 +25,11 @@ runs:
       run : if test -f "input_file.json"; then echo "got data"; else exit 1; fi
       shell: bash
     - name: Convert to Threadfix format
-      run: python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix "${{github.repository}}_${{github.ref}}"
+      run: |
+            string_to_hash="${{github.repository}}_${{github.ref}}"
+            hash_value=$(echo -n "$string_to_hash" | sha256sum | cut -d ' ' -f 1)
+            truncated_hash_value=$(echo "$hash_value" | cut -c 1-255)
+            python ${{github.action_path}}/threadfix_converter.py input_file.json output_file.threadfix $truncated_hash_value
       shell: bash
     - name: Push results to Threadfix
       run: |
