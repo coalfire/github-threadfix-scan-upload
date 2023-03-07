@@ -43,7 +43,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Run Threadfix Connector
-        uses: # Name of the action
+        uses: coalfire/github-threadfix-scan-upload@v3
         with: 
           TFIX_API_KEY: ${{secrets.TFIX_API_KEY}}
           TFIX_INSTANCE_URL: ${{secrets.TFIX_INSTANCE_URL}}
