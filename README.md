@@ -26,7 +26,7 @@ Additionally, you'll need to configure your ThreadFix deployment to recognize th
 
 ## Use
 
-To use this workflow, simply include it in your action. Here's an example:
+This action will push open alerts for the current branch where the action is running. To use this workflow, simply include it in your action. Here's an example:
 
 ```yaml
 
