@@ -2,8 +2,6 @@
 A tool to import security findings (i.e. CodeQL) to an application in ThreadFix.
 
 
-# Example Workflow
-
 ## Secrets Configuration
 
 Before you proceed further, make sure to have 3 key elements at hand as you'll need to add them as your [workflow secrets](https://github.com/Azure/actions-workflow-samples/blob/master/assets/create-secrets-for-GitHub-workflows.md). You'll need:
@@ -20,13 +18,13 @@ If you do not know the ID of your application, you can make a GET request to the
 
 Additionally, you'll need to configure your ThreadFix deployment to recognize this new scanner source. 
 
-1. Log into ThreadFix and click Global>Administration > System Settings > Scanner Settings
+1. Log into ThreadFix and click Global > Administration > System Settings > Scanner Settings
 1. Click the grey "Create New Scanner" button at the top of the page
 1. Add details as needed, making sure the scanner name matched "GitHub Advanced Security" (note capitalization)
 
 ## Use
 
-This action will push open alerts for the current branch where the action is running. To use this workflow, simply include it in your action. Here's an example:
+This action will push **open** alerts for the current branch where the action is running. To use this workflow, simply include it in your action. Here's an example:
 
 ```yaml
 
