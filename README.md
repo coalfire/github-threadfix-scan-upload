@@ -35,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       security-events: read
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -123,7 +122,6 @@ Threadfix-action:
     needs: CodeQL-Build
     permissions:
       security-events: read
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
