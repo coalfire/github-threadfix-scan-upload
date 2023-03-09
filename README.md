@@ -33,6 +33,9 @@ on: [push]
 jobs:
   Threadfix-action:
     runs-on: ubuntu-latest
+    permissions:
+      security-events: read
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
