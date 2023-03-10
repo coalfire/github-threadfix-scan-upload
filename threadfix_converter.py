@@ -1,135 +1,111 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
-import datetime
+from datetime import datetime
 import json
 import sys
 
 
-# Converts SARIF to Threadfix
-def make_ref_rule_dict(item):
-    ret_val = {}
-    current_rule = {}
-    cwe_start = 'external/cwe/cwe-'
+def make_ref_rule_dict(item: dict) -> dict:
+    """
+    Convert SARIF to Threadfix
+    """
+    rule = item["rule"]
 
-    current_rule['id'] = item['rule']['id']
-    current_rule['shortDescription'] = item['rule']['description']
-    current_rule['fullDescription'] = item['rule']['description']  # To revisit
+    severity = rule.get("security_severity_level", rule["severity"])
 
-    # Severities
-    if 'security_severity_level' in item['rule']:
-        current_rule['nativeSeverity'] = item['rule']['security_severity_level'].capitalize()
-        current_rule['severity'] = item['rule']['security_severity_level'].capitalize()
-    else:
-        current_rule['nativeSeverity'] = item['rule']['severity'].capitalize()
-        current_rule['severity'] = item['rule']['severity'].capitalize()
+    try:
+        cwe_start = "external/cwe/cwe-"
+        # next will raise StopIteration if no tags match the filter
+        cwe = next(filter(lambda x: x.startswith(cwe_start), rule["tags"]))
+        rule_type = cwe.replace(cwe_start, "")
+        mapping_type = "CWE"
+    except StopIteration:
+        rule_type = rule["id"]
+        mapping_type = "TOOL_VENDOR"
 
-    vuln_type = item['rule']['id']
-    current_rule['isCwe'] = False
-    for tag in item['rule']['tags']:
-        if str(tag).startswith(cwe_start):
-            vuln_type = str(tag)[len(cwe_start):len(str(tag))]
-            current_rule['isCwe'] = True
-    current_rule['type'] = vuln_type
-
-    ret_val[item['rule']['id']] = current_rule
-
-    return (ret_val)
+    return {
+        "id": rule["id"],
+        "shortDescription": rule["description"],
+        "fullDescription": rule["description"],  # To revisit
+        "type": rule_type,
+        "mapping_type": mapping_type,
+        "severity": severity.capitalize(),
+        "nativeSeverity": severity.capitalize(),
+    }
 
 
-def assemble_findings_for_run(finding_list, item, repo):
+def assemble_findings_for_run(item: dict, repo: str) -> dict:
     ref_rule_dict = make_ref_rule_dict(item)
-    finding_dict = {}
 
-    finding_dict['nativeId'] = repo + '-' + str(item['number'])
+    # mapping dict
+    mapping_dict = {
+        "value": ref_rule_dict["type"],
+        "primary": True,
+        "mappingType": ref_rule_dict["mapping_type"],
+    }
+    if ref_rule_dict["mapping_type"] != "CWE":
+        mapping_dict["vendorOtherType"] = "CodeQLRuleDB"
 
-    first_key = list(ref_rule_dict.keys())[0]
+    # dataflow dict
+    start_file = item["instances_url"]
 
-    finding_dict['severity'] = ref_rule_dict[first_key]['severity']
-    finding_dict['nativeSeverity'] = ref_rule_dict[first_key]['nativeSeverity']
+    dataflow_dict = {
+        "file": start_file,
+        "lineNumber": item["most_recent_instance"]["location"]["start_line"],
+        "columnNumber": item["most_recent_instance"]["location"][
+            "start_column"
+        ],
+        "text": "",
+    }
 
-    # If the rule had a CWE, add that mapping
-    if ref_rule_dict[first_key]['isCwe'] == True:
-        mapping_dict = {}
-        mapping_dict['mappingType'] = 'CWE'
-        mapping_dict['value'] = ref_rule_dict[first_key]['type']
-        mapping_dict['primary'] = True
-        mapping_list = []
-        mapping_list.append(mapping_dict)
-        finding_dict['mappings'] = mapping_list
-    else:
-        mapping_dict = {}
-        mapping_dict['mappingType'] = 'TOOL_VENDOR'
-        mapping_dict['value'] = ref_rule_dict[first_key]['type']
-        mapping_dict['primary'] = True
-        mapping_dict['vendorOtherType'] = 'CodeQLRuleDB'
-        mapping_list = []
-        mapping_list.append(mapping_dict)
-        finding_dict['mappings'] = mapping_list
+    static_details_dict = {
+        "dataFlow": [dataflow_dict],
+        "parameter": "",
+        "file": start_file,
+    }
 
-    finding_dict['summary'] = ref_rule_dict[first_key]['shortDescription']
-    finding_dict['description'] = ref_rule_dict[first_key]['shortDescription']
-
-    #     # Make the dataflow
-    dataflow_dict = {}
-    start_file = item['instances_url']
-    dataflow_dict['file'] = start_file
-    dataflow_dict['lineNumber'] = item['most_recent_instance']['location']['start_line']
-    dataflow_dict['columnNumber'] = item['most_recent_instance']['location']['start_column']
-    dataflow_dict['text'] = ''
-
-    static_details_dict = {}
-
-    dataflow_list = []
-    dataflow_list.append(dataflow_dict)
-    static_details_dict['dataFlow'] = dataflow_list
-    static_details_dict['parameter'] = ''
-    static_details_dict['file'] = start_file
-
-    # #     # Add the static details to the finding
-    finding_dict['staticDetails'] = static_details_dict
-
-    # #     # Finally add the whole finding
-    finding_list.append(finding_dict)
+    return {
+        "nativeId": f"{repo}-{str(item['number'])}",
+        "severity": ref_rule_dict["severity"],
+        "nativeSeverity": ref_rule_dict["nativeSeverity"],
+        "mappings": [mapping_dict],
+        "summary": ref_rule_dict["shortDescription"],
+        "description": ref_rule_dict["shortDescription"],
+        "staticDetails": static_details_dict,
+    }
 
 
-if len(sys.argv) < 3:
-    print("usage: sarif_to_threadfix.py <input_file> <output_file>")
-    exit(1)
+if len(sys.argv) != 4:
+    print(f"usage: {sys.argv[0]} <input_file> <output_file> <repo>")
+    sys.exit(1)
 
 infile = sys.argv[1]
 outfile = sys.argv[2]
-repo = sys.argv[3]
+repository = sys.argv[3]
 
 print("Input file will be: " + infile)
 print("Output file will be: " + outfile)
 
-sarif_data = {}
 with open(infile, "r") as read_file:
     sarif_data = json.load(read_file)
 
-output = {}
+findings = [
+    assemble_findings_for_run(item, repository) for item in sarif_data
+]
 
-# Metadata
-output['collectionType'] = 'SAST'
-output['source'] = 'GitHub Advanced Security'
+now = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%SZ")
+output = {
+    "collectionType": "SAST",
+    "source": "GitHub Advanced Security",
+    "created": now,
+    "exported": now,
+    "updated": now,
+    "findings": findings,
+}
 
-# Handle timestamp
-created_date_string = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%dT%H:%M:%SZ')
-output['created'] = str(created_date_string)
-output['exported'] = str(created_date_string)
-output['updated'] = str(created_date_string)
-# Now build the finding list
-
-
-finding_list = []
-
-for item in sarif_data:
-    assemble_findings_for_run(finding_list, item, repo)
-
-output['findings'] = finding_list
-
-# Write the output file
-
-with open(outfile, "w") as write_file:
-    json.dump(output, write_file)
+with open(outfile, "w", encoding='utf8') as write_file:
+#    # do we want compact json?
+#    json.dump(output, write_file, separators=(",", ":"))
+    # or pretty json?
+    json.dump(output, write_file, indent=2)
     write_file.close()
